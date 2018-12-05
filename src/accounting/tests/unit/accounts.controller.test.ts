@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { AccountsController } from '../accounts.controller';
+import { AccountsController } from '../../accounts.controller';
 
 describe('AccountsController', () => {
   describe('#getAllAccounts', () => {

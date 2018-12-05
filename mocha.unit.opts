@@ -2,4 +2,4 @@
 --require reflect-metadata
 --slow 20
 --timeout 50
-**/tests/*.test.ts
+**/tests/unit/*.test.ts

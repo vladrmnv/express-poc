@@ -1,0 +1,5 @@
+--require ts-node/register
+--require reflect-metadata
+--slow 200
+--timeout 1000
+**/tests/integration/*.integration.ts

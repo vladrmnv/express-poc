@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { AccountsService } from "../../accounting/accounts.service";
+import { AccountsService } from "../../accounts.service";
 
 describe("AccountsService", () => {
   describe("#getNewAccounts", () => {
