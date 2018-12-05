@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { InversifyExpressServer } from 'inversify-express-utils';
+import { InversifyExpressServer, cleanUpMetadata } from 'inversify-express-utils';
 import supertest = require('supertest');
 import { expect } from 'chai';
 import { Server } from 'http';
@@ -19,6 +19,7 @@ describe('AccountsController', () => {
   });
   after(async () => {
     await server.close();
+    cleanUpMetadata();
   });
   describe('GET /', () => {
     it('returns a list of accounts with 200', async () => {
