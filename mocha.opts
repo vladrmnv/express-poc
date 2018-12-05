@@ -1,0 +1,5 @@
+--require ts-node/register
+--require reflect-metadata
+--slow 20
+--timeout 50
+**/tests/*.test.ts
