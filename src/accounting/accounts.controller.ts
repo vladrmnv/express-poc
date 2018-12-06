@@ -3,6 +3,7 @@ import {
   httpGet,
   httpPost,
   requestBody,
+  BaseHttpController,
 } from 'inversify-express-utils';
 import multer, { memoryStorage } from 'multer';
 
@@ -13,9 +14,10 @@ import {
 import express = require('express');
 
 @controller('/accounts')
-export class AccountsController {
+export class AccountsController extends BaseHttpController {
   private accountsService: IAccountsService;
   constructor(accountsService: AccountsService) {
+    super();
     this.accountsService = accountsService;
   }
   @httpGet('/')
@@ -25,11 +27,11 @@ export class AccountsController {
 
   @httpPost('/')
   public async createAccount(@requestBody() account: any) {
-    return account;
+    return this.json(account, 201);
   }
 
   @httpPost('/cheque', multer().single('image'))
-  public async uploadCheque(req: express.Request) {
+  public async uploadCheque() {
     try {
       return 200;
     } catch (e) {

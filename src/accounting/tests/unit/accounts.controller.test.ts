@@ -19,8 +19,8 @@ describe('AccountsController', () => {
   describe('#createAccount', () => {
     it('returns new account', async () => {
       const expected = { id: 'Account3' };
-      const result = await controller.createAccount(expected);
-      expect(result).to.deep.eq(expected);
+      const result: any = await controller.createAccount(expected);
+      expect(result.json).to.deep.eq(expected);
     });
   });
 });

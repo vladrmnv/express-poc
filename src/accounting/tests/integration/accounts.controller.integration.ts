@@ -59,7 +59,7 @@ describe('AccountsController', () => {
         .post('/accounts')
         .send(newAccount)
         .set('Accept', 'application/json')
-        .expect(200);
+        .expect(201);
 
       const account = res.body;
       expect(account).to.deep.eq(newAccount);
