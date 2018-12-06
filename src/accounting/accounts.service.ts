@@ -3,7 +3,6 @@ import { injectable } from 'inversify';
 export interface IAccountsService {
   getNewAccounts(): Promise<string[]>;
 }
-
 /**
  * Combines common accounting business logic
  */
