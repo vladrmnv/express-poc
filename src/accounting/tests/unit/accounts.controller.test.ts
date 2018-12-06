@@ -19,10 +19,7 @@ describe('AccountsController', () => {
   describe('#createAccount', () => {
     it('returns new account', async () => {
       const expected = { id: 'Account3' };
-      const req = { body: expected };
-      const result = await controller.createAccount(<Request>(
-        req
-      ), <any>{});
+      const result = await controller.createAccount(expected);
       expect(result).to.deep.eq(expected);
     });
   });

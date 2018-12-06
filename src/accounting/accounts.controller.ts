@@ -2,15 +2,12 @@ import {
   controller,
   httpGet,
   httpPost,
-  request,
-  response,
+  requestBody,
 } from 'inversify-express-utils';
-import { Request } from 'express';
 import {
   AccountsService,
   IAccountsService,
 } from './accounts.service';
-import express = require('express');
 
 @controller('/accounts')
 export class AccountsController {
@@ -25,9 +22,8 @@ export class AccountsController {
 
   @httpPost('/')
   public async createAccount(
-    @request() req: express.Request,
-    @response() res: express.Response
+    @requestBody() account: any,
   ) {
-    return res.status(201).json({ id: 'Account3' });
+    return account;
   }
 }

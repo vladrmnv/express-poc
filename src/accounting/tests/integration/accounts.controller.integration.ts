@@ -21,8 +21,15 @@ describe('AccountsController', () => {
     const inversifyServer = new InversifyExpressServer(
       container
     );
+    inversifyServer.setConfig(app => {
+      app.use(
+        bodyParser.urlencoded({
+          extended: true,
+        })
+      );
+      app.use(bodyParser.json());
+    });
     app = inversifyServer.build();
-    app.use(bodyParser());
   });
   after(async () => {
     cleanUpMetadata();
@@ -46,11 +53,12 @@ describe('AccountsController', () => {
       const newAccount = {
         id: 'Account3',
       };
+      console.log('Sending account:', newAccount);
       const res = await supertest(app)
         .post('/accounts')
-        .send({name: 'dsfasd'})
-        .set('Accept', 'application/json')
-        // .expect(201);
+        .send(newAccount)
+        .set('Accept', 'application/json');
+      // .expect(201);
 
       const account = res.body;
       expect(account).to.deep.eq(newAccount);
