@@ -48,9 +48,9 @@ describe('AccountsController', () => {
       };
       const res = await supertest(app)
         .post('/accounts')
-        .send(newAccount)
+        .send({name: 'dsfasd'})
         .set('Accept', 'application/json')
-        .expect(201);
+        // .expect(201);
 
       const account = res.body;
       expect(account).to.deep.eq(newAccount);
