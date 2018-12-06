@@ -5,7 +5,6 @@ import {
   request,
   response,
 } from 'inversify-express-utils';
-import { Request } from 'express';
 import {
   AccountsService,
   IAccountsService,
@@ -21,13 +20,5 @@ export class AccountsController {
   @httpGet('/')
   public async getAllAccounts(): Promise<string[]> {
     return this.accountsService.getNewAccounts();
-  }
-
-  @httpPost('/')
-  public async createAccount(
-    @request() req: express.Request,
-    @response() res: express.Response
-  ) {
-    return res.status(201).json({ id: 'Account3' });
   }
 }

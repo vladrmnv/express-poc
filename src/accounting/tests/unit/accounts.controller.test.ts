@@ -16,14 +16,4 @@ describe('AccountsController', () => {
       expect(result).to.deep.eq(expected);
     });
   });
-  describe('#createAccount', () => {
-    it('returns new account', async () => {
-      const expected = { id: 'Account3' };
-      const req = { body: expected };
-      const result = await controller.createAccount(<Request>(
-        req
-      ), <any>{});
-      expect(result).to.deep.eq(expected);
-    });
-  });
 });

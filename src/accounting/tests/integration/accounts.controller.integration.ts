@@ -41,21 +41,4 @@ describe('AccountsController', () => {
     it('matches the declared schema');
     it('throws when unauthorized');
   });
-  describe('POST /', () => {
-    it('returns a created account', async () => {
-      const newAccount = {
-        id: 'Account3',
-      };
-      const res = await supertest(app)
-        .post('/accounts')
-        .send(newAccount)
-        .set('Accept', 'application/json')
-        .expect(201);
-
-      const account = res.body;
-      expect(account).to.deep.eq(newAccount);
-    });
-    it('matches the declared schema');
-    it('throws when unauthorized');
-  });
 });
