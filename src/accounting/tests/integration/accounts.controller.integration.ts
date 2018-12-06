@@ -12,6 +12,7 @@ import {
   IAccountsService,
   AccountsService,
 } from '../../accounts.service';
+import { request } from 'https';
 
 describe('AccountsController', () => {
   let app: Application;
@@ -65,5 +66,16 @@ describe('AccountsController', () => {
     });
     it('matches the declared schema');
     it('throws when unauthorized');
+  });
+  describe('POST /cheque', () => {
+    it('accepts a file', async () => {
+      await supertest(app)
+        .post('/accounts/cheque')
+        .attach(
+          'image',
+          `${__dirname}/test-image.png`
+        )
+        .expect(200)
+    });
   });
 });
