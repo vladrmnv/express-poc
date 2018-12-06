@@ -13,12 +13,14 @@ import {
   AccountsService,
 } from '../../accounts.service';
 import { request } from 'https';
+import { ResolveTenant } from '../../../multitenancy/tenant-middleware';
 
 describe('AccountsController', () => {
   let app: Application;
   before(async () => {
     const container = new Container();
     container.bind<IAccountsService>(AccountsService).toSelf();
+    const resolveTenant = new ResolveTenant();
     const inversifyServer = new InversifyExpressServer(
       container
     );
@@ -29,22 +31,24 @@ describe('AccountsController', () => {
         })
       );
       app.use(bodyParser.json());
+      app.use(resolveTenant.handler)
     });
     app = inversifyServer.build();
   });
   after(async () => {
     cleanUpMetadata();
   });
-  describe('GET /', () => {
+  describe.only('GET /', () => {
     it('returns a list of accounts with 200', async () => {
       const { body: accounts } = await supertest(app)
         .get('/accounts')
+        .query('?tenant=test')
         .set('Accept', 'application/json');
       console.log(accounts);
-      expect(accounts).to.deep.eq([
-        'account1: $100',
-        'account2: $200',
-      ]);
+      expect(accounts).to.deep.eq({
+        info: ['account1: $100'],
+        tenant: 'test',
+      });
     });
     it('matches the declared schema');
     it('throws when unauthorized');

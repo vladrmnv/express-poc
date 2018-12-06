@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { Request } from 'express';
 import { AccountsController } from '../../accounts.controller';
 import { AccountsService } from '../../accounts.service';
 
@@ -11,7 +10,13 @@ describe('AccountsController', () => {
   });
   describe('#getAllAccounts', () => {
     it('returns an array of all accounts', async () => {
-      const expected = ['account1: $100', 'account2: $200'];
+      const expected = {
+        info: ['account1: $100'],
+        tenant: 'test',
+      };
+      (<any>controller).httpContext = {
+        tenant: 'test',
+      };
       const result = await controller.getAllAccounts();
       expect(result).to.deep.eq(expected);
     });
@@ -19,7 +24,9 @@ describe('AccountsController', () => {
   describe('#createAccount', () => {
     it('returns new account', async () => {
       const expected = { id: 'Account3' };
-      const result: any = await controller.createAccount(expected);
+      const result: any = await controller.createAccount(
+        expected
+      );
       expect(result.json).to.deep.eq(expected);
     });
   });

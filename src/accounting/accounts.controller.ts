@@ -12,6 +12,7 @@ import {
   IAccountsService,
 } from './accounts.service';
 import express = require('express');
+import { ResolveTenant } from '../multitenancy/tenant-middleware';
 
 @controller('/accounts')
 export class AccountsController extends BaseHttpController {
@@ -21,8 +22,11 @@ export class AccountsController extends BaseHttpController {
     this.accountsService = accountsService;
   }
   @httpGet('/')
-  public async getAllAccounts(): Promise<string[]> {
-    return this.accountsService.getNewAccounts();
+  public async getAllAccounts(): Promise<any> {
+    return {
+      info: await this.accountsService.getNewAccounts(),
+      tenant: (<any>this.httpContext).tenant,
+    };
   }
 
   @httpPost('/')

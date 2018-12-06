@@ -9,6 +9,6 @@ export interface IAccountsService {
 @injectable()
 export class AccountsService implements IAccountsService {
   public getNewAccounts() {
-    return Promise.resolve(['account1: $100', 'account2: $200']);
+    return Promise.resolve(['account1: $100']);
   }
 }
