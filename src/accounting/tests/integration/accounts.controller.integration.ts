@@ -2,23 +2,19 @@ import { Container } from 'inversify';
 import { InversifyExpressServer, cleanUpMetadata } from 'inversify-express-utils';
 import supertest = require('supertest');
 import { expect } from 'chai';
-import { Server } from 'http';
 import { Application } from 'express';
 import '../../accounts.controller';
-
-const PORT = 3000;
+import bodyParser = require('body-parser');
 
 describe('AccountsController', () => {
-  let server: Server;
   let app: Application;
   before(async () => {
     const container = new Container();
     const inversifyServer = new InversifyExpressServer(container);
     app = inversifyServer.build();
-    server = await app.listen(PORT);
+    app.use(bodyParser());
   });
   after(async () => {
-    await server.close();
     cleanUpMetadata();
   });
   describe('GET /', () => {
@@ -32,7 +28,18 @@ describe('AccountsController', () => {
     it('throws when unauthorized');
   });
   describe('POST /', () => {
-    it('returns a created account');
+    it.only('returns a created account', async () => {
+      const newAccount = {
+        id: 'Account3'
+      };
+      const res = await supertest(app)
+        .post('/accounts')
+        .send(newAccount)
+        .set('Accept', 'application/json');
+      console.log(res);
+      const account = res.body;
+      expect(account).to.deep.eq(newAccount);
+    });
     it('matches the declared schema');
     it('throws when unauthorized');
   });
