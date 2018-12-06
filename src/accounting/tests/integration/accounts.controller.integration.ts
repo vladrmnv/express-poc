@@ -58,8 +58,8 @@ describe('AccountsController', () => {
       const res = await supertest(app)
         .post('/accounts')
         .send(newAccount)
-        .set('Accept', 'application/json');
-      // .expect(201);
+        .set('Accept', 'application/json')
+        .expect(200);
 
       const account = res.body;
       expect(account).to.deep.eq(newAccount);
@@ -71,11 +71,8 @@ describe('AccountsController', () => {
     it('accepts a file', async () => {
       await supertest(app)
         .post('/accounts/cheque')
-        .attach(
-          'image',
-          `${__dirname}/test-image.png`
-        )
-        .expect(200)
+        .attach('image', `${__dirname}/test-image.png`)
+        .expect(200);
     });
   });
 });
