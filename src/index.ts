@@ -18,6 +18,7 @@ inversifyServer.setConfig(app => {
     })
   );
   app.use(bodyParser.json());
+  
 });
 const app = inversifyServer.build();
 

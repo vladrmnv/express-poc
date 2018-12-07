@@ -1,14 +1,13 @@
 import {
   BaseMiddleware,
-  injectHttpContext
-,
+  injectHttpContext,
 } from 'inversify-express-utils';
 import express from 'express';
 import { interfaces, injectable } from 'inversify';
 
 const multitenancyTypes = {
-  ResolveTenant: Symbol('ResolveTenant')
-}
+  ResolveTenant: Symbol('ResolveTenant'),
+};
 
 @injectable()
 export class ResolveTenant extends BaseMiddleware {
