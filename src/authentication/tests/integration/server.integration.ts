@@ -19,12 +19,20 @@ describe('Authentication server', () => {
   });
   describe('/login', () => {
     it('authenticates user', async () => {
+      const credentials = {
+        username: 'test@mail.com',
+        password: 1234,
+      };
+      const expected = {
+        id: 1,
+        username: credentials.username
+      }
       const { body } = await supertest(app.getApp())
         .post('/login')
-        .query({ client_id: 1 })
+        .send(credentials)
         .set(SET_JSON);
       console.log(body);
-      expect(body).to.be.not.null;
+      expect(body).to.deep.eq(expected);
     });
   });
 });

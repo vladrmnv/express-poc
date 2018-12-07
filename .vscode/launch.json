@@ -5,14 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/index.js",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
-    },
-    {
-      "name": "Current TS File",
+      "name": "App",
       "type": "node",
       "request": "launch",
       "args": ["${workspaceFolder}/src/index.ts"],

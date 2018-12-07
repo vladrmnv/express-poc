@@ -3,6 +3,7 @@ import bodyParser = require('body-parser');
 import { Server } from 'http';
 import express = require('express');
 import { Application } from 'express';
+import { passportMiddleware } from './passport';
 
 export interface AuthenticationApp {
   start(port: number): void;
@@ -19,6 +20,7 @@ export class AuthenticationAppImpl implements AuthenticationApp {
   private createApp(): Application {
     const app = express();
     let server = oauth2orize.createServer();
+    const passport = passportMiddleware();
     server = this.setupServer(server);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,8 +28,12 @@ export class AuthenticationAppImpl implements AuthenticationApp {
     app.get('/', (req, res) => {
       res.json('OAuth 2.0 Server');
     });
-    app.post('/login', (req, res) => {
-      res.sendStatus(200);
+    app.post('/login', (req, res, next) => {
+      passport.authenticate('local', (err, user, info) => {
+        if (!user) res.sendStatus(401);
+        delete user.password;
+        res.send(user)
+      })(req, res, next);
     });
 
     return app;
