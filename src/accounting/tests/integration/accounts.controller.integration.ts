@@ -12,15 +12,12 @@ import {
   IAccountsService,
   AccountsService,
 } from '../../accounts.service';
-import { request } from 'https';
-import { ResolveTenant } from '../../../multitenancy/tenant-middleware';
 
 describe('AccountsController', () => {
   let app: Application;
   before(async () => {
     const container = new Container();
     container.bind<IAccountsService>(AccountsService).toSelf();
-    const resolveTenant = new ResolveTenant();
     const inversifyServer = new InversifyExpressServer(
       container
     );

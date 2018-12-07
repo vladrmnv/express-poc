@@ -1,18 +1,13 @@
 import {
   controller,
   httpGet,
-  httpPost,
-  requestBody,
   BaseHttpController,
 } from 'inversify-express-utils';
-import multer, { memoryStorage } from 'multer';
 
 import {
   AccountsService,
   IAccountsService,
 } from './accounts.service';
-import express = require('express');
-import { ResolveTenant } from '../multitenancy/tenant-middleware';
 
 @controller('/accounts')
 export class AccountsController extends BaseHttpController {
