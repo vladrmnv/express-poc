@@ -1,4 +1,3 @@
-import { Container } from 'inversify';
 import { cleanUpMetadata } from 'inversify-express-utils';
 import supertest = require('supertest');
 import { expect } from 'chai';
