@@ -7,6 +7,7 @@ import {
 import { InversifyExpressServer } from 'inversify-express-utils';
 import bodyParser = require('body-parser');
 import './accounting/accounts.controller';
+import { AuthenticationAppImpl } from './authentication/server';
 
 const container = new Container();
 container.bind<IAccountsService>(AccountsService).toSelf();
@@ -18,10 +19,15 @@ inversifyServer.setConfig(app => {
     })
   );
   app.use(bodyParser.json());
-  
 });
-const app = inversifyServer.build();
-
-app.listen(3000, () => {
-  console.log('Server running');
-});
+const accountingServer = inversifyServer.build();
+const authentication = new AuthenticationAppImpl();
+Promise.all([
+  accountingServer.listen(3000),
+  authentication.start(3001),
+])
+  .then(() => {
+    console.log('accountingServer running on 3000');
+    console.log('authentication running on 3001');
+  })
+  .catch(e => console.log(e));

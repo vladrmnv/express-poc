@@ -6,23 +6,33 @@ import {
 } from 'oauth2-server';
 
 export interface IAccessService {
-  generateAccessToken(client: any, user: any, scope: any): any;
+  getAccessToken(): Promise<string>;
+  getAuthorizationCode(): Promise<string>;
+  getClient(): Promise<any>;
+  getUser(): Promise<string>;
+  saveAuthorizationCode(): any;
 }
 
 export class AccessService implements IAccessService {
-  async generateAccessToken(client: any, user: any, scope: any) {
-    return 'token';
+  saveAuthorizationCode() {
+    throw new Error('Method not implemented.');
   }
-  async getClient(clientId: any, clientSecret: any) {
-    return null;
+  async getAccessToken() {
+    return 'works!';
   }
-  async getUserFromClient(client: any) {
-    return null;
+
+  // Or, calling a Node-style callback.
+  async getAuthorizationCode() {
+    return 'works!';
   }
-  async saveToken(token: any, client: any, user: any) {
-    return null;
+
+  // Or, using generators.
+  async getClient() {
+    return 'client';
   }
-  async validateScope(user: any, client: any, scope: any) {
-    return null;
+
+  // Or, async/wait (using Babel).
+  async getUser() {
+    return 'works!';
   }
 }
