@@ -37,7 +37,7 @@ describe('AccountsController', () => {
   after(async () => {
     cleanUpMetadata();
   });
-  describe.only('GET /', () => {
+  describe('GET /', () => {
     it('returns a list of accounts with 200', async () => {
       const { body: accounts } = await supertest(app)
         .get('/accounts')
