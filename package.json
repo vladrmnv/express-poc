@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "ts-node src/index.ts",
+    "start:watch": "ts-node-dev --respawn src/index.ts",
     "test": "mocha --opts mocha.unit.opts",
     "test:parallel": "mocha-parallel-tests --opts mocha.unit.opts",
     "test:watch": "mocha --watch --watch-extensions ts --opts mocha.unit.opts",

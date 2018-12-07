@@ -23,10 +23,7 @@ export class AccountsController extends BaseHttpController {
   }
   @httpGet('/')
   public async getAllAccounts(): Promise<any> {
-    return {
-      info: await this.accountsService.getNewAccounts(),
-      tenant: (<any>this.httpContext).tenant,
-    };
+    return this.accountsService.getNewAccounts();
   }
 
   @httpPost('/')

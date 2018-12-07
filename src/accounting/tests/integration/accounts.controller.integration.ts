@@ -31,7 +31,6 @@ describe('AccountsController', () => {
         })
       );
       app.use(bodyParser.json());
-      app.use(resolveTenant.handler)
     });
     app = inversifyServer.build();
   });
@@ -45,38 +44,9 @@ describe('AccountsController', () => {
         .query('?tenant=test')
         .set('Accept', 'application/json');
       console.log(accounts);
-      expect(accounts).to.deep.eq({
-        info: ['account1: $100'],
-        tenant: 'test',
-      });
+      expect(accounts).to.deep.eq(['account1: $100']);
     });
     it('matches the declared schema');
     it('throws when unauthorized');
-  });
-  describe('POST /', () => {
-    it('returns a created account', async () => {
-      const newAccount = {
-        id: 'Account3',
-      };
-      console.log('Sending account:', newAccount);
-      const res = await supertest(app)
-        .post('/accounts')
-        .send(newAccount)
-        .set('Accept', 'application/json')
-        .expect(201);
-
-      const account = res.body;
-      expect(account).to.deep.eq(newAccount);
-    });
-    it('matches the declared schema');
-    it('throws when unauthorized');
-  });
-  describe('POST /cheque', () => {
-    it('accepts a file', async () => {
-      await supertest(app)
-        .post('/accounts/cheque')
-        .attach('image', `${__dirname}/test-image.png`)
-        .expect(200);
-    });
   });
 });
