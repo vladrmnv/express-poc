@@ -24,6 +24,7 @@ export class AuthenticationAppImpl implements AuthenticationApp {
     server = this.setupServer(server);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(passport.initialize());
 
     app.get('/', (req, res) => {
       res.json('OAuth 2.0 Server');
@@ -32,8 +33,12 @@ export class AuthenticationAppImpl implements AuthenticationApp {
       passport.authenticate('local', (err, user, info) => {
         if (!user) res.sendStatus(401);
         delete user.password;
-        res.send(user)
+        res.send(user);
       })(req, res, next);
+    });
+
+    app.get('/protected', passport.authenticate('local'), (req, res) => {
+      res.json('protected!');
     });
 
     return app;

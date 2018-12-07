@@ -20,19 +20,23 @@ describe('Authentication server', () => {
   describe('/login', () => {
     it('authenticates user', async () => {
       const credentials = {
-        username: 'test@mail.com',
+        email: 'test@mail.com',
         password: 1234,
       };
       const expected = {
         id: 1,
-        username: credentials.username
-      }
+        email: credentials.email,
+      };
       const { body } = await supertest(app.getApp())
         .post('/login')
         .send(credentials)
         .set(SET_JSON);
-      console.log(body);
       expect(body).to.deep.eq(expected);
+    });
+  });
+  describe('/protected', () => {
+    it('rejectes unauthorized requests', async () => {
+      await supertest(app.getApp()).get('/protected').expect(401);
     });
   });
 });
