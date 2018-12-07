@@ -23,6 +23,9 @@ export class AuthenticationAppImpl implements AuthenticationApp {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
+    app.get('/', (req, res) => {
+      res.json('OAuth 2.0 Server');
+    });
     app.post('/login', (req, res) => {
       res.sendStatus(200);
     });
@@ -59,7 +62,7 @@ export class AuthenticationAppImpl implements AuthenticationApp {
 
     return server;
   }
-  async start(port: number) {
+  async start(port: number = 3001) {
     this.server = await this.app.listen(port);
   }
   async stop() {

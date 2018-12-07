@@ -1,9 +1,6 @@
 import supertest from 'supertest';
 
-import {
-  AuthenticationApp,
-  AuthenticationAppImpl,
-} from '../../server';
+import { AuthenticationApp, AuthenticationAppImpl } from '../../server';
 import { expect } from 'chai';
 const SET_JSON = ['Accept', 'application/json'];
 
@@ -12,7 +9,15 @@ before(async () => {
   app = new AuthenticationAppImpl();
 });
 describe('Authentication server', () => {
-  describe('core', () => {
+  describe('/', () => {
+    it('sends index page', async () => {
+      const { body } = await supertest(app.getApp())
+        .get('/')
+        .set(SET_JSON);
+      expect(body).to.eq('OAuth 2.0 Server');
+    });
+  });
+  describe('/login', () => {
     it('authenticates user', async () => {
       const { body } = await supertest(app.getApp())
         .post('/login')

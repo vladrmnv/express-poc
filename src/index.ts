@@ -21,10 +21,10 @@ inversifyServer.setConfig(app => {
   app.use(bodyParser.json());
 });
 const accountingServer = inversifyServer.build();
-const authentication = new AuthenticationAppImpl();
+const authenticationServer = new AuthenticationAppImpl();
 Promise.all([
   accountingServer.listen(3000),
-  authentication.start(3001),
+  authenticationServer.start(3001),
 ])
   .then(() => {
     console.log('accountingServer running on 3000');
