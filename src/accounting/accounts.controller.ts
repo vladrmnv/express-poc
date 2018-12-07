@@ -25,18 +25,4 @@ export class AccountsController extends BaseHttpController {
   public async getAllAccounts(): Promise<any> {
     return this.accountsService.getNewAccounts();
   }
-
-  @httpPost('/')
-  public async createAccount(@requestBody() account: any) {
-    return this.json(account, 201);
-  }
-
-  @httpPost('/cheque', multer().single('image'))
-  public async uploadCheque() {
-    try {
-      return 200;
-    } catch (e) {
-      console.log(e);
-    }
-  }
 }
