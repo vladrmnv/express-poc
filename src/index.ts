@@ -7,7 +7,7 @@ import {
 import { InversifyExpressServer } from 'inversify-express-utils';
 import bodyParser = require('body-parser');
 import './accounting/accounts.controller';
-import { AuthenticationAppImpl } from './authentication/server';
+import { AuthenticationAppImpl } from './authentication/app';
 
 const container = new Container();
 container.bind<IAccountsService>(AccountsService).toSelf();

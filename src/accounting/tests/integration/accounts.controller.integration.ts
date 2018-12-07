@@ -1,35 +1,15 @@
 import { Container } from 'inversify';
-import {
-  InversifyExpressServer,
-  cleanUpMetadata,
-} from 'inversify-express-utils';
+import { cleanUpMetadata } from 'inversify-express-utils';
 import supertest = require('supertest');
 import { expect } from 'chai';
 import { Application } from 'express';
+import { AccountingApp } from '../../app';
 import '../../accounts.controller';
-import bodyParser = require('body-parser');
-import {
-  IAccountsService,
-  AccountsService,
-} from '../../accounts.service';
 
 describe('AccountsController', () => {
   let app: Application;
   before(async () => {
-    const container = new Container();
-    container.bind<IAccountsService>(AccountsService).toSelf();
-    const inversifyServer = new InversifyExpressServer(
-      container
-    );
-    inversifyServer.setConfig(app => {
-      app.use(
-        bodyParser.urlencoded({
-          extended: true,
-        })
-      );
-      app.use(bodyParser.json());
-    });
-    app = inversifyServer.build();
+    app = new AccountingApp().getApp();
   });
   after(async () => {
     cleanUpMetadata();
@@ -40,7 +20,6 @@ describe('AccountsController', () => {
         .get('/accounts')
         .query('?tenant=test')
         .set('Accept', 'application/json');
-      console.log(accounts);
       expect(accounts).to.deep.eq(['account1: $100']);
     });
     it('matches the declared schema');

@@ -1,10 +1,11 @@
 import supertest from 'supertest';
 
-import { AuthenticationApp, AuthenticationAppImpl } from '../../server';
+import { AuthenticationAppImpl } from '../../app';
 import { expect } from 'chai';
+import { INwApp } from '../../../core/nw-app';
 const SET_JSON = ['Accept', 'application/json'];
 
-let app: AuthenticationApp;
+let app: INwApp;
 before(async () => {
   app = new AuthenticationAppImpl();
 });
@@ -15,28 +16,6 @@ describe('Authentication server', () => {
         .get('/')
         .set(SET_JSON);
       expect(body).to.eq('OAuth 2.0 Server');
-    });
-  });
-  describe('/login', () => {
-    it('authenticates user', async () => {
-      const credentials = {
-        email: 'test@mail.com',
-        password: 1234,
-      };
-      const expected = {
-        id: 1,
-        email: credentials.email,
-      };
-      const { body } = await supertest(app.getApp())
-        .post('/login')
-        .send(credentials)
-        .set(SET_JSON);
-      expect(body).to.deep.eq(expected);
-    });
-  });
-  describe('/protected', () => {
-    it('rejectes unauthorized requests', async () => {
-      await supertest(app.getApp()).get('/protected').expect(401);
     });
   });
 });

@@ -45,6 +45,7 @@
     "@types/oauth2orize": "^1.8.5",
     "@types/passport": "^0.4.7",
     "@types/passport-local": "^1.0.33",
+    "@types/passport-oauth2": "^1.4.7",
     "express": "^4.16.4",
     "i": "^0.3.6",
     "inversify": "^5.0.1",
@@ -55,6 +56,8 @@
     "oauth2orize": "git+https://github.com/jaredhanson/oauth2orize.git",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-oauth2": "^1.4.0",
     "reflect-metadata": "^0.1.12"
   }
 }

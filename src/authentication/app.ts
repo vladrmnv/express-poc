@@ -4,14 +4,12 @@ import { Server } from 'http';
 import express = require('express');
 import { Application } from 'express';
 import { passportMiddleware } from './passport';
+import { INwApp } from '../core/nw-app';
 
-export interface AuthenticationApp {
-  start(port: number): void;
-  stop(): void;
-  getApp(): Application;
-}
-
-export class AuthenticationAppImpl implements AuthenticationApp {
+/**
+ * OAuth2 server
+ */
+export class AuthenticationAppImpl implements INwApp {
   private app: Application;
   private server: Server;
   constructor() {
