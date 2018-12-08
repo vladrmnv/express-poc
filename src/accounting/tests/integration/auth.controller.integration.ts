@@ -16,5 +16,11 @@ describe('AuthenticationController', () => {
         .expect(200);
     });
   });
-  // describe('/provider/callback');
+  describe('/provider/callback', () => {
+    it('authenticates user', async () => {
+      await supertest(app)
+        .get(`${baseUrl}/provider/callback`)
+        .expect(200);
+    });
+  });
 });

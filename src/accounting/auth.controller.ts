@@ -7,4 +7,9 @@ export class AuthenticationController extends BaseHttpController {
     redirectToProvider() {
         return 200;
     }
+
+    @httpGet('/provider/callback')
+    handleOAuthCallback() {
+        return 200;
+    }
 }
