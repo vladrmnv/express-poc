@@ -5,10 +5,11 @@ import express = require('express');
 import { Application } from 'express';
 import { INwApp } from '../core/nw-app';
 import session from 'express-session';
+import { UnauthorizedError } from './errors';
 /**
  * OAuth2 server
  */
-export class AuthenticationAppImpl implements INwApp {
+export class AuthenticationApp implements INwApp {
   private app: Application;
   private server: Server;
   private client = {
@@ -30,6 +31,13 @@ export class AuthenticationAppImpl implements INwApp {
       res.json('OAuth 2.0 Server');
     });
 
+    app.post('/login', (req, res) => {
+      res.json({
+        token: 'userToken',
+      });
+    });
+
+    app.use(authorization);
     app.get(
       '/authorize',
       server.authorize((clientId, redirectURI, done) => {
@@ -44,23 +52,22 @@ export class AuthenticationAppImpl implements INwApp {
         });
       }
     );
+    app.use(errorHandler);
 
     return app;
   }
+
   private setupServer(server: OAuth2Server): oauth2orize.OAuth2Server {
     server.serializeClient((client, done) => done(null, client.id));
-
     server.deserializeClient((id, done) => {
       done(null, this.client);
     });
-
     server.grant(
       oauth2orize.grant.code((_client, _redirectUri, _user, _ares, done) => {
         const code = '12341234';
         done(null, code);
       })
     );
-
     server.exchange(
       oauth2orize.exchange.code((client, code, redirectUrl, done) => {
         return done(null, 'someToken');
@@ -78,4 +85,16 @@ export class AuthenticationAppImpl implements INwApp {
   getApp() {
     return this.app;
   }
+}
+
+function authorization(req: any, res: any, next: any) {
+  const token = req.header('Authorization');
+  if (!token) {
+    next(new UnauthorizedError());
+  }
+  next();
+}
+
+function errorHandler(err: any, req: any, res: express.Response) {
+  res.status(err.status).send(err);
 }
