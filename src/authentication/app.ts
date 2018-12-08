@@ -3,15 +3,18 @@ import bodyParser = require('body-parser');
 import { Server } from 'http';
 import express = require('express');
 import { Application } from 'express';
-import { passportMiddleware } from './passport';
 import { INwApp } from '../core/nw-app';
-
+import session from 'express-session';
 /**
  * OAuth2 server
  */
 export class AuthenticationAppImpl implements INwApp {
   private app: Application;
   private server: Server;
+  private client = {
+    id: 1,
+    redirectURI: 'localhost:3000/auth/provider/callback',
+  };
   constructor() {
     this.app = this.createApp();
   }
@@ -21,18 +24,34 @@ export class AuthenticationAppImpl implements INwApp {
     server = this.setupServer(server);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(session({ secret: 'authSecret' }));
 
     app.get('/', (req, res) => {
       res.json('OAuth 2.0 Server');
     });
 
+    app.get(
+      '/authorize',
+      server.authorize((clientId, redirectURI, done) => {
+        // verify that client id and redirectURI match
+        return done(null, this.client, this.client.redirectURI);
+      }),
+      (req: any, res) => {
+        res.json({
+          transactionID: req.oauth2.transactionID,
+          user: req.user,
+          client: req.oauth2.client,
+        });
+      }
+    );
+
     return app;
   }
-  setupServer(server: OAuth2Server): oauth2orize.OAuth2Server {
+  private setupServer(server: OAuth2Server): oauth2orize.OAuth2Server {
     server.serializeClient((client, done) => done(null, client.id));
 
     server.deserializeClient((id, done) => {
-      done(null, { id: 1 });
+      done(null, this.client);
     });
 
     server.grant(
@@ -42,16 +61,8 @@ export class AuthenticationAppImpl implements INwApp {
       })
     );
 
-    server.grant(
-      oauth2orize.grant.token((client, user, ares, done) => {
-        const token = 'someToken';
-        return done(null, token);
-      })
-    );
-
     server.exchange(
-      oauth2orize.exchange.clientCredentials((client, scope, done) => {
-        // Validate the client
+      oauth2orize.exchange.code((client, code, redirectUrl, done) => {
         return done(null, 'someToken');
       })
     );
