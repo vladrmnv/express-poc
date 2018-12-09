@@ -67,7 +67,7 @@ export class AuthenticationApp implements INwApp {
     });
     server.grant(
       oauth2orize.grant.code((_client, _redirectUri, _user, _ares, done) => {
-        const code = '12341234';
+        const code = '1234';
         done(null, code);
       })
     );

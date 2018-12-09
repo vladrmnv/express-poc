@@ -54,8 +54,9 @@ describe('Authentication server', () => {
       expect(body).to.haveOwnProperty('transactionID');
     });
   });
-  describe.only('/decision', async () => {
+  describe('/decision', async () => {
     it('redirects to client url with code query', async () => {
+      const redirectUrl = 'localhost:3000/auth/provider/callback';
       const agent = supertest.agent(app.getApp());
       const authResponse = await agent
         .get('/authorize')
@@ -64,10 +65,9 @@ describe('Authentication server', () => {
         .query({
           client_id: 1,
           response_type: 'code',
-          redirect_uri: 'localhost:3000/auth/provider/callback',
+          redirect_uri: redirectUrl,
           scope: '*',
         })
-        .expect('set-cookie', /connect/);
       const cookies = authResponse.header['set-cookie'];
       await agent
         .post('/decision')
@@ -78,7 +78,8 @@ describe('Authentication server', () => {
           transaction_id: authResponse.body.transactionID,
           client_id: 1,
         })
-        .expect(302);
+        .expect(302)
+        .expect('Location', new RegExp(redirectUrl));
     });
   });
 });
