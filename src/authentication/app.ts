@@ -26,7 +26,9 @@ export class AuthenticationApp implements INwApp {
     server = this.setupServer(server);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(session({ secret: 'authSecret', resave: false, saveUninitialized: false }));
+    app.use(
+      session({ secret: 'authSecret', resave: false, saveUninitialized: false })
+    );
 
     app.get('/', (req, res) => {
       res.json('OAuth 2.0 Server');
@@ -53,7 +55,8 @@ export class AuthenticationApp implements INwApp {
         });
       }
     );
-    app.post('/decision', server.decision())
+    app.post('/decision', server.decision());
+    app.post('/token', server.token(), server.errorHandler());
     app.all('*', (req, res) => res.sendStatus(404));
     app.use(errorHandler);
 
