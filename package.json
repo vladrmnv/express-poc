@@ -47,6 +47,7 @@
     "@types/passport": "^0.4.7",
     "@types/passport-local": "^1.0.33",
     "@types/passport-oauth2": "^1.4.7",
+    "@types/superagent": "^3.8.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "i": "^0.3.6",
@@ -60,6 +61,7 @@
     "passport-local": "^1.0.0",
     "passport-oauth": "^1.0.0",
     "passport-oauth2": "^1.4.0",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.12",
+    "superagent": "^4.0.0"
   }
 }

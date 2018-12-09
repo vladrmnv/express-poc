@@ -3,8 +3,9 @@ import bodyParser = require('body-parser');
 import { Server } from 'http';
 import express = require('express');
 import { Application } from 'express';
-import { INwApp } from '../core/nw-app';
 import session from 'express-session';
+
+import { INwApp } from '../core/nw-app';
 import { UnauthorizedError } from './errors';
 /**
  * OAuth2 server
@@ -25,7 +26,7 @@ export class AuthenticationApp implements INwApp {
     server = this.setupServer(server);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(session({ secret: 'authSecret' }));
+    app.use(session({ secret: 'authSecret', resave: false, saveUninitialized: false }));
 
     app.get('/', (req, res) => {
       res.json('OAuth 2.0 Server');
@@ -52,6 +53,8 @@ export class AuthenticationApp implements INwApp {
         });
       }
     );
+    app.post('/decision', server.decision())
+    app.all('*', (req, res) => res.sendStatus(404));
     app.use(errorHandler);
 
     return app;

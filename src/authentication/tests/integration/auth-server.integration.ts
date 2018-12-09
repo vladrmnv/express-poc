@@ -1,14 +1,18 @@
 import supertest from 'supertest';
-
 import { AuthenticationApp } from '../../app';
 import { expect } from 'chai';
 import { INwApp } from '../../../core/nw-app';
-const SET_JSON = {'Accept' : 'application/json'};
-const AUTHORIZATION = {'Authorization': 'userToken'};
+import superagent from 'superagent';
+import { cleanUpMetadata } from 'inversify-express-utils';
+const SET_JSON = { Accept: 'application/json' };
+const AUTHORIZATION = { Authorization: 'userToken' };
 
 let app: INwApp;
-before(async () => {
+beforeEach(async () => {
   app = new AuthenticationApp();
+});
+after(async () => {
+  cleanUpMetadata();
 });
 describe('Authentication server', () => {
   describe('/', () => {
@@ -25,18 +29,18 @@ describe('Authentication server', () => {
       const { body } = await supertest(app.getApp())
         .post('/login')
         .set(SET_JSON)
-        .send(credentials)
+        .send(credentials);
       expect(body.token).to.eq('userToken');
     });
   });
-  describe('/auth/authorize', () => {
-    it('returns 403 when anauthenticated', async () => {
-      await supertest(app.getApp())
-        .get('/authorize')
-        .set(SET_JSON)
-        .expect(403);
-    });
-    it('sends info needed to authorze client app', async () => {
+  describe('/authorize', () => {
+    // it('returns 403 when anauthenticated', () => {
+    //   supertest(app.getApp())
+    //     .get('/authorize')
+    //     .set(SET_JSON)
+    //     .expect(403);
+    // });
+    it('sends info needed to authorize client app', async () => {
       const { body, status } = await supertest(app.getApp())
         .get('/authorize')
         .set(SET_JSON)
@@ -44,10 +48,37 @@ describe('Authentication server', () => {
         .query({
           client_id: 1,
           response_type: 'code',
-          redirect_url: 'localhost:3000/auth/provider/callback',
+          redirect_uri: 'localhost:3000/auth/provider/callback',
           scope: '*',
         });
       expect(body).to.haveOwnProperty('transactionID');
+    });
+  });
+  describe.only('/decision', async () => {
+    it('redirects to client url with code query', async () => {
+      const agent = supertest.agent(app.getApp());
+      const authResponse = await agent
+        .get('/authorize')
+        .set(SET_JSON)
+        .set(AUTHORIZATION)
+        .query({
+          client_id: 1,
+          response_type: 'code',
+          redirect_uri: 'localhost:3000/auth/provider/callback',
+          scope: '*',
+        })
+        .expect('set-cookie', /connect/);
+      const cookies = authResponse.header['set-cookie'];
+      await agent
+        .post('/decision')
+        .set({ 'set-cookie': cookies })
+        .set(SET_JSON)
+        .set(AUTHORIZATION)
+        .send({
+          transaction_id: authResponse.body.transactionID,
+          client_id: 1,
+        })
+        .expect(302);
     });
   });
 });
