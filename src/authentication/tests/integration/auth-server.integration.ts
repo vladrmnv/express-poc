@@ -2,7 +2,6 @@ import supertest, { SuperTest, Test, Response } from 'supertest';
 import { AuthenticationApp } from '../../app';
 import { expect } from 'chai';
 import { INwApp } from '../../../core/nw-app';
-import superagent from 'superagent';
 import { cleanUpMetadata } from 'inversify-express-utils';
 const SET_JSON = { Accept: 'application/json' };
 const SET_XFORM_URL_ENCODED = { Accept: 'application/x-www-form-urlencoded' };

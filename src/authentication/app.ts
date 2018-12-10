@@ -22,8 +22,8 @@ export class AuthenticationApp implements INwApp {
   }
   private createApp(): Application {
     const app = express();
-    let server = oauth2orize.createServer();
-    server = this.setupServer(server);
+    let authServer = oauth2orize.createServer();
+    authServer = this.setupServer(authServer);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(
@@ -43,7 +43,7 @@ export class AuthenticationApp implements INwApp {
     app.use(authorization);
     app.get(
       '/authorize',
-      server.authorize((clientId, redirectURI, done) => {
+      authServer.authorize((clientId, redirectURI, done) => {
         // verify that client id and redirectURI match
         return done(null, this.client, this.client.redirectURI);
       }),
@@ -55,8 +55,8 @@ export class AuthenticationApp implements INwApp {
         });
       }
     );
-    app.post('/decision', server.decision());
-    app.post('/token', server.token(), server.errorHandler());
+    app.post('/decision', authServer.decision());
+    app.post('/token', authServer.token(), authServer.errorHandler());
     app.all('*', (req, res) => res.sendStatus(404));
     app.use(errorHandler);
 
@@ -102,5 +102,5 @@ function authorization(req: any, res: any, next: any) {
 }
 
 function errorHandler(err: any, req: any, res: express.Response) {
-  res.status(err.status).send(err);
+  res.status(err.status).json(err);
 }
