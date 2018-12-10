@@ -51,7 +51,6 @@
     "@types/superagent": "^3.8.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "i": "^0.3.6",
     "inversify": "^5.0.1",
     "inversify-express-utils": "^6.2.0",
     "jsonwebtoken": "^8.4.0",
