@@ -56,7 +56,6 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "multer": "^1.4.1",
-    "npm": "^6.4.1",
     "oauth2orize": "git+https://github.com/jaredhanson/oauth2orize.git",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
